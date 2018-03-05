@@ -1,7 +1,7 @@
 # Too Wide!
 
 Sites such as, um, Wikipedia insist on using the full width of the screen.
-For many of us, this means an renders the page much to wide to be comfortably readable.
+For many of us, this means it renders the page much too wide to be comfortably readable.
 
 This add-on adds a contextual (right-click) menu which allows you to toggle the width of the current page.
 
