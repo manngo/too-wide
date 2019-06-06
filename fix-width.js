@@ -1,11 +1,11 @@
 //	Toggle Width
 	function toggleWidth(request, sender, sendResponse) {
 	//	var style=document.body.style;
-		if('oldCSS' in document.body.style) {
+		if('oldCSS' in document.body.style) {	//	turn off
 			document.body.style.cssText=document.body.style.oldCSS;
 			delete document.body.style.oldCSS;
 		}
-		else {
+		else {									//	turn on
 			document.body.style.oldCSS=document.body.style.cssText;
 			var getting = browser.storage.local.get('maxWidth');
 			getting.then(onGot, onError);
