@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Too Wide!",
-	"version": "1.0",
+	"version": "1.1",
 	"icons": {
 		"24": "/icons/icon-24.png",
 		"48": "/icons/icon-48.png",
