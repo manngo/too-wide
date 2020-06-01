@@ -15,7 +15,7 @@
 	],
 
 	"background": {
-		"scripts": ["background.js", "fix-width.js"]
+		"scripts": ["background.js"]
 	},
 
 	"options_ui": {
@@ -29,4 +29,16 @@
 			"96": "/icons/icon-96.png"
 		}
 	}
+	
+	,
+	"content_scripts": [
+		{
+			"matches": [
+				"*://*/*"
+			],
+			"js": [
+				"fix-width.js"
+			]
+		}
+	]
 }
