@@ -1,6 +1,7 @@
+const DEFAULT_WIDTH = 960;
 
 function onGot(item) {
-	var maxWidth = item.maxWidth || 960;
+	var maxWidth = item.maxWidth || DEFAULT_WIDTH;
 	document.body.style.cssText = `max-width: ${maxWidth}px; margin: 0 auto; position: relative;`;
 }
 
