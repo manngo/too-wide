@@ -1,24 +1,34 @@
-	document.addEventListener('DOMContentLoaded',function() {
-		restoreOptions();
-		document.querySelector("form").addEventListener("submit", saveOptions);
+const DEFAULT_WIDTH = 960;
 
-		function saveOptions(e) {
-			browser.storage.local.set({
-				maxWidth: document.querySelector("#max-width").value
-			});
-			document.querySelector("#max-width").value = result.maxWidth;
-			e.preventDefault();
-		}
+function saveOptions(e) {
+	var currentValue = document.querySelector("#max-width").value;
+	browser.storage.local.set({
+		maxWidth: currentValue
+	});
 
-		function restoreOptions() {
-			function setCurrentChoice(result) {
-				document.querySelector("#max-width").value = result.maxWidth || 960;
-			}
-			function onError(error) {
-				console.log(`Error: ${error}`);
-			}
+	document.querySelector("#max-width").value = currentValue;
+	e.preventDefault();
+}
 
-			var getting = browser.storage.local.get("maxWidth");
-			getting.then(setCurrentChoice, onError);
-		}
-	},false);
+// Resets the value of the width setting to the default value
+function resetWidthToDefault(e) {
+	browser.storage.local.set({
+		maxWidth: DEFAULT_WIDTH
+	});
+	document.querySelector("#max-width").value = DEFAULT_WIDTH;
+	e.preventDefault();
+}
+
+// Restores the values of the options to the settings page
+function restoreOptions() {
+	var getting = browser.storage.local.get("maxWidth");
+	getting.then((result) => {
+		document.querySelector("#max-width").value = result.maxWidth || DEFAULT_WIDTH;
+	});
+}
+
+document.addEventListener('DOMContentLoaded', restoreOptions, false);
+
+// Add the listeners for the buttons
+document.querySelector("form").addEventListener("submit", saveOptions);
+document.querySelector("form").addEventListener("reset", resetWidthToDefault);
