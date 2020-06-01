@@ -1,0 +1,36 @@
+{
+  "name": "too-wide",
+  "version": "1.1.0",
+  "description": "Firefox addon that restricts the page width of websites",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "watch-firefox": "web-ext run --source-dir ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manngo/too-wide.git"
+  },
+  "keywords": [
+    "wikipedia",
+    "width",
+    "too",
+    "wide",
+    "website",
+    "page",
+    "pixel",
+    "limit"
+  ],
+  "author": "Mark Simon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manngo/too-wide/issues"
+  },
+  "homepage": "https://github.com/manngo/too-wide#readme",
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "prettier": "2.0.5",
+    "web-ext": "^4.2.0"
+  }
+}
