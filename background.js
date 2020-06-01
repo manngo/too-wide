@@ -31,3 +31,15 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 
 	}
 });
+
+browser.browserAction.onClicked.addListener(() => {
+	browser.tabs.executeScript({
+		file: "fix-width.js"
+	});
+
+	var querying = browser.tabs.query({
+		active: true,
+		currentWindow: true
+	});
+	querying.then(sendMessage);
+});
