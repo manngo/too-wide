@@ -22,11 +22,7 @@ function findActiveTab() {
 browser.contextMenus.onClicked.addListener(function(info, tab) {
 	if (info.menuItemId == "fix-width") {
 		console.log("Clicked on too-wide context menu option.");
-		var tabsPromise = findActiveTab();
-		if (tabsPromise) {
-			tabsPromise.then(sendMessage);
-		}
-
+		sendMessage([tab]);
 	}
 });
 
