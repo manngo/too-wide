@@ -15,12 +15,12 @@ designed a long long time ago, before wide screens became fashionable.
 ## Usage
 You can use the extension to toggle the page width via the context menu or the action button.
 
+## Development
+To install and automatically refresh the Addon in a new Firefox instance, you can use the development environment with [node](https://nodejs.org/en/).
 
-
-## To Do
-
-The Next Version will include the ability to persist the width for certain sites.
+You can install the dependencies with `npm install`.
+Then, to test the Addon you should run the command `npm run watch-firefox` in the working directory of the project. This opens a new Firefox instance with the Addon installed. Furthermore, the `about:debug` page and the Wikipedia main page will be opened for convenient testing and debugging.
 
 ## E & EO
 
-This addon does what it does, and doesn’t do what it doesn’t do. Share & Enjoy.
+This Addon does what it does, and doesn’t do what it doesn’t do. Share & Enjoy.
