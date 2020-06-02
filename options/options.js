@@ -1,4 +1,4 @@
-import { WIDTH_TEXT_FIELD_ID, ENABLED_CHECKBOX_ID, SETTINGS_KEY } from "../util/constants.js";
+import { WIDTH_TEXT_FIELD_ID, ENABLED_CHECKBOX_ID, SETTINGS_KEY, DEFAULT_SETTINGS } from "../util/constants.js";
 import { callWithStorageDefaults } from "../util/util.js";
 
 function saveOptions(e) {
@@ -16,25 +16,21 @@ function saveOptions(e) {
 	browser.storage.local.set(settingsToSave);
 
 	populateUI(currentWidth, isEnabled);
-	e.preventDefault();
+	if (e) {
+		e.preventDefault();
+	}
 }
 
 // Resets the value of the width setting to the default value
 function resetWidthToDefault(e) {
-	// DONE Use the defaults saved in the local storage
-	let result = browser.storage.local.get(SETTINGS_KEY.DEFAULTS);
-	result.then((results) => {
-		let enabled = DEFAULT_SETTINGS.DEFAULT_ENABLED;
-		let width = DEFAULT_SETTINGS.DEFAULT_MAX_WIDTH;
-		if (results[SETTINGS_KEY.DEFAULTS]) {
-			enabled = results[SETTINGS_KEY.DEFAULTS][SETTINGS_KEY.DEFAULT_ENABLED];
-			width = results[SETTINGS_KEY.DEFAULTS][SETTINGS_KEY.DEFAULT_MAX_WIDTH];
-		} 
-		browser.storage.local.set({
-			[SETTINGS_KEY.DEFAULT_MAX_WIDTH]: width,
-			[SETTINGS_KEY.DEFAULT_ENABLED]: enabled
-		});
-		populateUI(width, enabled);
+	console.debug("Restoring defaults in options menu.");
+	browser.storage.local.set({
+		[SETTINGS_KEY.DEFAULTS]: {
+			[SETTINGS_KEY.DEFAULT_MAX_WIDTH]: DEFAULT_SETTINGS.DEFAULT_MAX_WIDTH,
+			[SETTINGS_KEY.DEFAULT_ENABLED]: DEFAULT_SETTINGS.DEFAULT_ENABLED
+		}
+	}).then(() => {
+		callWithStorageDefaults(populateUI);
 	});
 	e.preventDefault();
 }
@@ -46,7 +42,6 @@ function populateUI(width, enabled) {
 }
 
 // Restores the values of the options to the settings page
-// TODO Fix reset in options menu
 function restoreOptions() {
 	var getting = browser.storage.local.get(SETTINGS_KEY.DEFAULTS);
 	getting.then((result) => {
