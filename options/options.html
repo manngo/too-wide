@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<script src="options.js"></script>
+		<script type="module" src="options.js"></script>
 		<style>
 			body {
 				font-family: sans-serif;
@@ -17,9 +17,13 @@
 	</head>
 	<body>
 		<form id="options">
-	    	<label for="number">Max Page Width <input type="number" id="max-width" ></label>
+				<label for="number">Max Page Width <input type="number" id="max-width" ></label>
+				<div>
+					<label for="fix-width-enabled">Enabled by default</label>
+					<input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked>
+				</div>
 	    	<button name="submit" type="submit">OK</button>
-	    	<button name="reset" type="submit">Reset</button>
+	    	<button name="reset" type="reset">Reset</button>
 		</form>
 	</body>
 </html>

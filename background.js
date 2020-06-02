@@ -19,6 +19,12 @@ function findActiveTab() {
 	});
 }
 
+// TODO Apply the width restrictions on page load, if enabled
+document.addEventListener('DOMContentLoaded', () => {
+	console.debug("Applying script at page load.");
+	findActiveTab().then(sendMessage);
+});
+
 browser.contextMenus.onClicked.addListener(function(info, tab) {
 	if (info.menuItemId == "fix-width") {
 		console.log("Clicked on too-wide context menu option.");
