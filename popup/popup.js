@@ -2,6 +2,7 @@ import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../util/constants.js";
 import { callWithStorageDefaults } from "../util/util.js";
 
 // TODO Add checks for switching tabs with keyboard shortcuts -> Currently popup stays open and does not work any more
+// TODO Add checks for inputs in text field which are not numbers and which are then submitted with a submit event
 
 /*
  * Populates the entries of the popup menu with the given values.
@@ -62,10 +63,7 @@ function saveOptions(e) {
   console.debug(`The plugin enabled checkbox has the value: ${isEnabled}`);
 
   saveValuesToStorage(currentWidth, isEnabled)
-    .then(sendMessageToCurrentTab)
-    .then(() => {
-      window.close();
-    });
+    .then(sendMessageToCurrentTab);
 }
 
 function sendMessageToCurrentTab() {
@@ -102,13 +100,24 @@ function saveValuesToStorage(width, enabled) {
 
 function resetOptions(e) {
   console.debug("Reset pressed on popup");
-  callWithStorageDefaults(saveValuesToStorage);
-  callWithStorageDefaults(populateUI);
+  callWithStorageDefaults(populateUI)
+    .then(() => {
+      saveOptions(e);
+    });
   e.preventDefault();
 }
+
 
 // Add listeners
 document.addEventListener('DOMContentLoaded', restoreOptions, false);
 
-document.querySelector("form").addEventListener("submit", saveOptions);
-document.getElementById("options").addEventListener("reset", resetOptions);
+document.getElementById("fix-width-enabled").addEventListener("change", saveOptions);
+document.getElementById("max-width").addEventListener("change", saveOptions);
+
+// Add the listener to the reset button
+document.querySelector("button[name='button-reset']").addEventListener("reset", resetOptions);
+
+document.querySelector('button[name="button-close"]').addEventListener('click', () => {
+  console.debug("Clicked on close.");
+  window.close();
+});
