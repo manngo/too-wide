@@ -2,38 +2,44 @@ import { WIDTH_TEXT_FIELD_ID, ENABLED_CHECKBOX_ID, SETTINGS_KEY, DEFAULT_SETTING
 import { callWithStorageDefaults } from "../util/util.js";
 
 function saveOptions(e) {
-	console.debug("saveOptions");
-	var currentWidth = document.querySelector(WIDTH_TEXT_FIELD_ID).value;
+	e.preventDefault();
+
+	var currentWidth = document.querySelector(WIDTH_TEXT_FIELD_ID).valueAsNumber;
+	if (!currentWidth) {
+		console.debug("Illegal width entered.");
+		return;
+	}
 	var isEnabled = document.querySelector(ENABLED_CHECKBOX_ID).checked;
-	let settingsToSave = {
-		[SETTINGS_KEY.DEFAULTS]: {
-			[SETTINGS_KEY.DEFAULT_MAX_WIDTH]: currentWidth,
-			[SETTINGS_KEY.DEFAULT_ENABLED]: isEnabled
-		}
-	};
-	console.debug("Settings to save:");
-	console.debug(JSON.parse(JSON.stringify(settingsToSave)));
-	browser.storage.local.set(settingsToSave);
+	saveValuesToStorage(currentWidth, isEnabled);
 
 	populateUI(currentWidth, isEnabled);
-	if (e) {
-		e.preventDefault();
-	}
 }
 
 // Resets the value of the width setting to the default value
-function resetWidthToDefault(e) {
+function resetOptionsToFactoryDefault(e) {
 	console.debug("Restoring defaults in options menu.");
-	browser.storage.local.set({
-		[SETTINGS_KEY.DEFAULTS]: {
-			[SETTINGS_KEY.DEFAULT_MAX_WIDTH]: DEFAULT_SETTINGS.DEFAULT_MAX_WIDTH,
-			[SETTINGS_KEY.DEFAULT_ENABLED]: DEFAULT_SETTINGS.DEFAULT_ENABLED
-		}
-	}).then(() => {
-		callWithStorageDefaults(populateUI);
-	});
 	e.preventDefault();
+
+	saveValuesToStorage(DEFAULT_SETTINGS.DEFAULT_MAX_WIDTH, DEFAULT_SETTINGS.DEFAULT_ENABLED)
+		.then(() => {
+			callWithStorageDefaults(populateUI);
+		});
 }
+
+
+function saveValuesToStorage(width, enabled) {
+	console.debug("Settings to save:");
+	const valuesToSave = {
+		[SETTINGS_KEY.DEFAULTS]: {
+			[SETTINGS_KEY.DEFAULT_MAX_WIDTH]: width,
+			[SETTINGS_KEY.DEFAULT_ENABLED]: enabled
+		}
+	};
+	console.debug(JSON.parse(JSON.stringify(valuesToSave)));
+
+	return browser.storage.local.set(valuesToSave);
+}
+
 
 function populateUI(width, enabled) {
 	console.debug("Populating options");
@@ -51,7 +57,6 @@ function restoreOptions() {
 			let enabled = result[SETTINGS_KEY.DEFAULTS][SETTINGS_KEY.DEFAULT_ENABLED];
 			populateUI(width, enabled);
 		} else {
-			// DONE Use the defaults saved in thte local storage if none are given
 			callWithStorageDefaults(populateUI);
 		}
 	});
@@ -60,5 +65,5 @@ function restoreOptions() {
 document.addEventListener('DOMContentLoaded', restoreOptions, false);
 
 // Add the listeners for the buttons
-document.getElementById("options").addEventListener("submit", saveOptions);
-document.getElementById("options").addEventListener("reset", resetWidthToDefault);
+document.getElementById("options").addEventListener("change", saveOptions);
+document.getElementById("options").addEventListener("reset", resetOptionsToFactoryDefault);

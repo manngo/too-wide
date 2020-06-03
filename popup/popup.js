@@ -71,8 +71,29 @@ function saveOptions(e) {
   var isEnabled = document.querySelector("#fix-width-enabled").checked || false;
   console.debug(`The checkbox has the value: ${isEnabled}`);
 
-  saveValuesToStorage(currentWidth, isEnabled)
+  findActiveTab()
+    .then((tabs) => {
+      if (tabs && tabs[0]) {
+        const hostName = getHostNameForTab(tabs[0]);
+        saveValuesToStorage(hostName, currentWidth, isEnabled);
+      }
+    })
     .then(sendMessageToCurrentTab);
+}
+
+
+/*
+ * Saves the values for the current tab to local storage.
+ */
+export function saveValuesToStorage(hostName, width, enabled) {
+  console.log(`Saving the values for hostname ${hostName} from the popup to local storage.`);
+  const valuesToSave = {
+    [hostName]: {
+      [SETTINGS_KEY.RESTRICTION_ENABLED]: enabled,
+      [SETTINGS_KEY.PAGE_WIDTH]: width
+    }
+  };
+  browser.storage.local.set(valuesToSave);
 }
 
 /*
@@ -87,27 +108,6 @@ function sendMessageToCurrentTab() {
   });
 }
 
-
-/*
- * Saves the values for the current tab to local storage.
- */
-function saveValuesToStorage(width, enabled) {
-  var tabPromise = findActiveTab();
-  return tabPromise.then((tabs) => {
-    if (tabs && tabs[0]) {
-      const hostName = getHostNameForTab(tabs[0]);
-      
-      console.log(`Saving the values for hostname ${hostName} from the popup to local storage.`);
-      const valuesToSave = {
-        [hostName]: {
-          [SETTINGS_KEY.RESTRICTION_ENABLED]: enabled,
-          [SETTINGS_KEY.PAGE_WIDTH]: width
-        }
-      };
-      browser.storage.local.set(valuesToSave);
-    }
-  });
-}
 
 function resetOptions(e) {
   console.debug("Reset pressed on popup");
@@ -126,7 +126,7 @@ document.getElementById("fix-width-enabled").addEventListener("change", saveOpti
 document.getElementById("max-width").addEventListener("change", saveOptions);
 
 // Add the listener to the reset button
-document.querySelector("button[name='button-reset']").addEventListener("reset", resetOptions);
+document.querySelector("button[name='button-reset']").addEventListener("click", resetOptions);
 
 // Add a listener to the close button that closes the popup on clicking.
 document.querySelector('button[name="button-close"]').addEventListener('click', () => {
