@@ -2,7 +2,6 @@ import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../util/constants.js";
 import { callWithStorageDefaults } from "../util/util.js";
 
 // TODO Add checks for switching tabs with keyboard shortcuts -> Currently popup stays open and does not work any more
-// TODO Add checks for inputs in text field which are not numbers and which are then submitted with a submit event
 
 /*
  * Populates the entries of the popup menu with the given values.
@@ -12,6 +11,9 @@ function populateUI(width, enabled) {
   document.querySelector("#fix-width-enabled").checked = enabled || DEFAULT_SETTINGS[SETTINGS_KEY.RESTRICTION_ENABLED];
 }
 
+/*
+ * Returns a promise that evaluates to the current active tab in the current active window.
+ */
 function findActiveTab() {
   return browser.tabs.query({
     active: true,
@@ -35,12 +37,13 @@ function restoreOptions() {
   }).then((results) => {
     // Found stored settings
     console.debug(`Found saved settings. Restoring.`);
-    console.debug(JSON.parse(JSON.stringify(results)));
+
     if (results[hostName]) {
       let width = results[hostName][SETTINGS_KEY.PAGE_WIDTH];
-      console.debug("Width: " + width);
       let enabled = results[hostName][SETTINGS_KEY.RESTRICTION_ENABLED];
-      console.debug("enabled: " + enabled);
+
+      console.debug("Saved width: " + width);
+      console.debug("Saved enabled status: " + enabled);
 
       populateUI(width, enabled);
     } else {
@@ -57,17 +60,27 @@ function saveOptions(e) {
   console.log("Saving options from the popup:");
   e.preventDefault();
 
-  var currentWidth = document.querySelector("#max-width").value;
+  var currentWidth = document.querySelector("#max-width").valueAsNumber;
+  // Precondition: The input has to be a valid number. If that is not the case it should not be saved.
+  if (!currentWidth) {
+    console.debug("Invalid width entered. Aborting the save of the preferences.");
+    return;
+  }
   console.debug(`The entered width is: ${currentWidth}`);
+
   var isEnabled = document.querySelector("#fix-width-enabled").checked || false;
-  console.debug(`The plugin enabled checkbox has the value: ${isEnabled}`);
+  console.debug(`The checkbox has the value: ${isEnabled}`);
 
   saveValuesToStorage(currentWidth, isEnabled)
     .then(sendMessageToCurrentTab);
 }
 
+/*
+ * Sends a message to the currently active tab.
+ * The message indicates that the injected script of the extension should
+ * reload the preferences and apply them.
+ */
 function sendMessageToCurrentTab() {
-  console.debug("sendMessageToCurrentTab");
   findActiveTab().then((tabs) => {
     console.log("Sending message");
     browser.tabs.sendMessage(tabs[0].id, { sender: "too-wide" });
@@ -82,18 +95,16 @@ function saveValuesToStorage(width, enabled) {
   var tabPromise = findActiveTab();
   return tabPromise.then((tabs) => {
     if (tabs && tabs[0]) {
-      console.debug("The current tab url is: " + tabs[0].url);
       const hostName = getHostNameForTab(tabs[0]);
-
-      console.log(`Saving the values for hostname ${hostName} from the popup to local storage: ${enabled}, ${width}`);
-      browser.storage.local.set({
+      
+      console.log(`Saving the values for hostname ${hostName} from the popup to local storage.`);
+      const valuesToSave = {
         [hostName]: {
           [SETTINGS_KEY.RESTRICTION_ENABLED]: enabled,
           [SETTINGS_KEY.PAGE_WIDTH]: width
         }
-      });
-    } else {
-      console.error("No tabs!");
+      };
+      browser.storage.local.set(valuesToSave);
     }
   });
 }
@@ -117,7 +128,7 @@ document.getElementById("max-width").addEventListener("change", saveOptions);
 // Add the listener to the reset button
 document.querySelector("button[name='button-reset']").addEventListener("reset", resetOptions);
 
+// Add a listener to the close button that closes the popup on clicking.
 document.querySelector('button[name="button-close"]').addEventListener('click', () => {
-  console.debug("Clicked on close.");
   window.close();
 });
