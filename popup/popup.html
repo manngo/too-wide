@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script type="module" src="popup.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    label>input {
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <h4>Too Wide!</h4>
+  <form id="options">
+    <div>
+      <label for="fix-width-enabled">Enabled </label>
+      <input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked>
+    </div>
+
+    <label for="number">Max Width <input type="number" id="max-width"></label>
+
+    <div>
+      <button name="button-close" type="button">Close</button>
+      <button name="button-reset" type="reset">Reset</button>
+    </div>
+  </form>
+
+</body>
+
+</html>
