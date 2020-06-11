@@ -3,26 +3,20 @@
 	<head>
 		<meta charset="utf-8">
 		<script type="module" src="options.js"></script>
-		<style>
-			body {
-				font-family: sans-serif;
-			}
-			label {
-				font-weight: bold;
-			}
-			label>input {
-				font-weight: normal;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="options.css">
 	</head>
 	<body>
 		<form id="options">
-				<label for="number">Max Page Width <input type="number" id="max-width" ></label>
-				<div>
-					<label for="fix-width-enabled">Enabled by default</label>
-					<input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked>
-				</div>
-	    	<button name="reset" type="reset">Reset</button>
+			<div id="div-fix-width-enabled">
+				<input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked>
+				<label for="fix-width-enabled">Enabled by default</label>
+			</div>
+			<div id="div-max-width">
+				<label for="max-width">Max Page Width</label><input type="number" id="max-width">
+			</div>
+			<div id="div-buttons">
+		    	<button name="reset" type="reset">Reset</button>
+			</div>
 		</form>
 	</body>
 </html>

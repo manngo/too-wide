@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="popup.css">
   <script type="module" src="popup.js"></script>
   <style>
     body {
@@ -19,13 +20,14 @@
   <h4>Too Wide!</h4>
   <form id="options">
     <div>
-      <label for="fix-width-enabled">Enabled </label>
-      <input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked>
+      <input type="checkbox" id="fix-width-enabled" name="fix-width-enabled" unchecked><label for="fix-width-enabled">Enabled</label>
     </div>
 
-    <label for="number">Max Width <input type="number" id="max-width"></label>
+    <div id="div-max-width">
+        <label for="max-width">Max Width</label><input type="number" id="max-width" pattern="\d+">
+    </div>
 
-    <div>
+    <div id="div-buttons">
       <button name="button-close" type="button">Close</button>
       <button name="button-reset" type="reset">Reset</button>
     </div>
