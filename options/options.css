@@ -1,22 +1,17 @@
 /*	options.css
 	================================================ */
 
-body, html {
-	margin: 0;
-	padding: 0;
-}
-
+	body, html {
+		margin: 0;
+		padding: 0;
+	}
 
 	:root>body {
 		font-family: sans-serif;
 		font-size: 120%;
-
-		qborder: thin solid #333;
-		
 		font-family: sans-serif;
-		qwidth: 16em;
 		--hover-background: #d8d8d8;
-}
+	}
 
 /*	Form
 	================================================ */
@@ -25,9 +20,6 @@ body, html {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		qpadding: .5em;
-		qtext-shadow: 0 1px white;
-		qbackground-color: #f8f8f8;
 	}
 
 	label {
@@ -70,7 +62,6 @@ body, html {
 		position: relative;
 		top: -6px;
 		left: 6px;
-		qborder: thin solid red;
 	}
 
 /*	max-width
@@ -89,9 +80,7 @@ body, html {
 		width: 4em;
 		margin-left: 1em;
 		text-align: right;
-		padding: .125em;
-		qfont-family: "Source Code Pro", monospace;
-		qfont-size: .9em;
+		padding: 0em .25em;
 		-moz-appearance:textfield;
 	}
 
