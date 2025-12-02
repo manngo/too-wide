@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/manngo/too-wide#readme",
   "devDependencies": {
-    "eslint": "^7.1.0",
+    "eslint": "^7.32.0",
     "prettier": "2.0.5",
     "web-ext": "^9.2.0"
   }
